@@ -1,4 +1,5 @@
 import React from 'react';
+import './Login.css';
 import sproutLogo from '../../static/sprout_logo.png';
 
 type Props = {}
@@ -11,6 +12,10 @@ const SignUp = (props: Props) => {
       <div className="login-container">
           <h2>SIGN UP</h2>
           <form action="post" className='login-form'>
+              <label htmlFor="first-name">first name</label>
+              <input id="first-name" type="text" className='input-box' />
+              <label htmlFor="last-name">last name</label>
+              <input id="last-name" type="text" className='input-box' />
               <label htmlFor="email">email</label>
               <input id="email" type="text" className='input-box' />
               <label htmlFor="password">password</label>

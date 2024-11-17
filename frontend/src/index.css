@@ -14,4 +14,7 @@ body{
 	font-family: 'Lexend Deca';
 	letter-spacing: 0.2rem;
 	background-color: #FFEDC5;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-bottom: 5rem;
 }
