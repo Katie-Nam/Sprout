@@ -109,7 +109,6 @@ const CalendarItem = ({onDaySelect}: Props) => {
                     </div>
                 ))}
                 </div>
-
                 {/* Calendar Days */}
                 <div className="calendar-days">
                 {renderDays()}

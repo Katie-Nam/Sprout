@@ -2,6 +2,7 @@ import React from 'react';
 import sproutImg from '../../static/sprout_logo.png';
 import './Home.css';
 import Calendar from './Calendar/Calendar';
+import Tasks from './Tasks/Tasks';
 
 type Props = {
 	userName : string;
@@ -16,6 +17,7 @@ const Home = ({userName}: Props) => {
 				<button className='logout-button'>logout</button>
 			</div>
 			<Calendar/>
+			<Tasks/>
 
 		</div>
 	)
