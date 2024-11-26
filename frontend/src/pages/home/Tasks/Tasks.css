@@ -1,0 +1,101 @@
+.task-container{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header-container{
+    width: 100%;
+}
+
+.task-container h1{
+    width: 80%;
+    border-bottom: 2px solid #39240B;
+    line-height: 3.5rem;
+    font-family: 'Modak';
+    font-weight: 500;
+}
+
+.add-icon{
+    height: 2.5rem;
+}
+
+.filter-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+}
+
+.filter{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+select{
+    border: none;
+    padding: 0.3rem 1rem;
+    border-radius: 2rem;
+    font-family: 'Lexend Deca';
+    letter-spacing: 0.2rem;
+}
+
+option{
+    text-align: center;
+}
+
+
+.task-table-container{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    background-color: #99A684;
+    color: #FFF7E7;
+    border-radius: 2rem;
+    padding: 0 5%;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th{
+    text-align: center;
+}
+
+tr{
+    height: 4rem;
+}
+
+
+thead{
+    border-bottom: 1.5px solid #FFF7E7;
+    line-height: 3rem;
+}
+
+.delete-button{
+    background-color: transparent;
+    border: none;
+}
+
+.delete-icon{
+    height: 1.5rem;
+}
+
+.checkbox{
+    margin: 0;
+    border: none;
+    outline: none;
+    height: 1rem;
+    background-color: #FFF7E7;
+}
