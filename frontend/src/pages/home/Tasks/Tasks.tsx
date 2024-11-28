@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './Tasks.css';
 import addIcon from '../../../static/add_icon.png'
 import TaskTable from './TaskTable';
+import TaskPopup from './TaskPopup';
 
 type Props = {}
 
@@ -10,6 +11,7 @@ const Tasks = (props: Props) => {
     const [selectedTag, setTagFilter] = useState("all");
     const [selectedPriority, setPriorityFilter] = useState("all");
     const [selectedDateRange, setDateRangeFilter] = useState("all");
+    const [popupVisible, setPopupVisible] = useState(false);
 
     const handleTagClick = (event : React.ChangeEvent<HTMLSelectElement> ) => {
         setTagFilter(event.target.value)
@@ -27,7 +29,7 @@ const Tasks = (props: Props) => {
         <div className='task-container'>
             <div className="header-container">
                 <h1>tasks!</h1>
-                <img src={addIcon} alt="add icon" className='add-icon'/>
+                <img src={addIcon} alt="add icon" className='add-icon' onClick={() => setPopupVisible(!popupVisible)}/>
             </div>
             <div className="filter-container">
                 {/* tag filter */}
@@ -62,7 +64,7 @@ const Tasks = (props: Props) => {
                 </div>
             </div>
             <TaskTable tagFilter={selectedTag} priorityFilter={selectedPriority} dateRangeFilter={selectedDateRange}/>
-
+            {popupVisible && <TaskPopup isAdd={true} setPopupVisible={setPopupVisible}/>}
 
 
         </div>

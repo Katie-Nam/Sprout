@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Tasks.css';
-import deleteIcon from '../../../static/delete_icon.png'
+import deleteIcon from '../../../static/delete_icon.png';
+import sortIcon from '../../../static/sort_icon.png';
 
 type Props = {
     tagFilter : string;
@@ -27,22 +28,38 @@ const TaskTable = (props: Props) => {
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
     };
 
+    const tagColors : {[key: string] : string} = {
+        "inf133": "brown"
+    }
+
+    const priorityColors : {[key: string] : string} = {
+        "!": "low",
+        "!!": "medium",
+        "!!!": "high"
+    }
+
     return (
         <div className='task-table-container'>
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>done?</th>
                         <th>description</th>
                         <th>tag</th>
-                        <th>priority</th>
-                        <th>due date</th>
+                        <th>
+                            priority
+                            <img src={sortIcon} alt="sort" className='sort-img' />
+                        </th>
+                        <th>
+                            due date
+                            <img src={sortIcon} alt="sort" className='sort-img' />
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {rows.map((row) => (
-                        <tr key={row.id}>
+                        <tr key={row.id} className={`${row.checkbox ? 'checked-task' : ''}`}>
                             <td>
                                 <input
                                     type="checkbox"
@@ -52,9 +69,15 @@ const TaskTable = (props: Props) => {
                                 />
                             </td>
                             <td>{row.description}</td>
-                            <td>{row.tag}</td>
                             <td>
-                                {row.priority}
+                                <div className={`table-tag-container ${tagColors[row.tag]}`}>
+                                    {row.tag}
+                                </div>
+                            </td>
+                            <td>
+                                <div className={`table-tag-container ${priorityColors[row.priority]}`}>
+                                    {row.priority}
+                                </div>
                             </td>
                             <td>{row.dueDate}</td>
                             <td>
