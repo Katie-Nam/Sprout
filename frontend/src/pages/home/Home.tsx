@@ -9,13 +9,19 @@ type Props = {
 }
 
 const Home = ({userName}: Props) => {
+
+	const handleLogoutClick = () => {
+		// TODO
+
+	}
+
 	return (
-		<div className='page-container'>
+		<div className='page-container background'>
 			<div className="header-container">
 				<img src={sproutImg} alt="sprout logo" className='corner-logo' />
-				<p className='header-text'>Welcome {userName}!</p>
-				<button className='logout-button'>logout</button>
+				<button className='logout-button' onClick={handleLogoutClick}>logout</button>
 			</div>
+			<p className='header-text'>welcome {userName.toLowerCase()}!</p>
 			<Calendar/>
 			<Tasks/>
 

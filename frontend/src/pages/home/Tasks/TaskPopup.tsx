@@ -1,27 +1,60 @@
 import React, { useState } from 'react';
 import './Tasks.css';
 import closeImg from '../../../static/cancel_icon.png';
-import addImg from '../../../static/add_icon.png';
+import addImg from '../../../static/add_icon_brown.png';
 import dropdownImg from '../../../static/dropdown_icon.png';
+
+interface Task {
+    id: number;                // Unique identifier for the task
+    checkbox: boolean;         // Checkbox state (true for checked, false for unchecked)
+    description: string;       // Task description
+    tag: string;               // Tag/category for the task
+    priority: string;          // Priority indicator, e.g., "!", "!!"
+    dueDate: string;           // Due date as an ISO 8601 string
+    reminder: string;
+}
+
 
 type Props = {
     isAdd ?: boolean;
+    // editDescription ?: string;
+    // editTag ?: string;
+    // editDueDate ?: string;
+    // editReminder ?: string;
+    // editPriority ?: string;
+    currentTagColors : { [key: string]: string };
+    rowID ?: number | null;
+    tasksData ?: Task[] | null;
     setPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TaskPopup = ({isAdd, setPopupVisible}: Props) => {
-    const [description, setDescription] = useState<string>("");
+const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}: Props) => {
+    const priorityColors : {[key: string] : string} = {
+        "!": "low",
+        "!!": "medium",
+        "!!!": "high"
+    }
+
+    console.log(tasksData);
+    var selectedRow = null;
+    if (tasksData && !isAdd){
+        for (var i = 0; i < tasksData.length; i++){
+            if (tasksData[i].id == rowID){
+                selectedRow = i;
+            }
+        }
+    }
+
+    console.log("selected row", selectedRow);
+    const [description, setDescription] = useState<string>(selectedRow != null && tasksData != null? tasksData[selectedRow].description : "");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [selectedTag, setSelectedTag] = useState<string | null>(null);
-    const [dueDate, setDueDate] = useState<string>("");
+    const [selectedTag, setSelectedTag] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].tag : null);
+    const [dueDate, setDueDate] = useState<string>(selectedRow != null && tasksData != null ? tasksData[selectedRow].dueDate: "");
     const [newTag, setNewTag] = useState<string>("");
-    const [tagColors, setTagColors] = useState<{ [key: string]: string }>({
-        inf133: "brown",
-        inf132: "green"
-    });
+    const [tagColors, setTagColors] = useState<{ [key: string]: string }>(currentTagColors);
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedReminder, setSelectedReminder] = useState<string | null>(null);
-    const [priority, setPriority] = useState<string>("medium");
+    const [selectedReminder, setSelectedReminder] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].reminder: null);
+    const [priority, setPriority] = useState<string>(selectedRow != null && tasksData != null ? priorityColors[tasksData[selectedRow].priority]: "");
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -78,6 +111,7 @@ const TaskPopup = ({isAdd, setPopupVisible}: Props) => {
 
 
 
+
     return (
         <div className='popup-background'>
             <div className="popup-container">
@@ -94,15 +128,15 @@ const TaskPopup = ({isAdd, setPopupVisible}: Props) => {
                     <form action="" className='priority-form'>
                         <div className="radio-button">
                             <label htmlFor="low-priority">low</label>
-                            <input type="radio" id="low-priority" name="priority" value="low" onChange={(e) => setPriority(e.target.value)}/>
+                            <input type="radio" id="low-priority" name="priority" value="low" checked={priority == "low"} onChange={(e) => setPriority(e.target.value)}/>
                         </div>
                         <div className="radio-button">
                             <label htmlFor="medium-priority">medium</label>
-                            <input type="radio" id="medium-priority" name="priority" value="medium" onChange={(e) => setPriority(e.target.value)}/>
+                            <input type="radio" id="medium-priority" name="priority" value="medium" checked={priority == "medium"} onChange={(e) => setPriority(e.target.value)}/>
                         </div>
                         <div className="radio-button">
                             <label htmlFor="high-priority">high</label>
-                            <input type="radio" id="high-priority" name="priority" value="high" onChange={(e) => setPriority(e.target.value)}/>
+                            <input type="radio" id="high-priority" name="priority" value="high" checked={priority == "high"} onChange={(e) => setPriority(e.target.value)}/>
                         </div>
                     </form>
                     <label htmlFor="tags">tags *</label>

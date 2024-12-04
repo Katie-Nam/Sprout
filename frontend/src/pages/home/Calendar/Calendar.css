@@ -8,6 +8,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    background-color: rgba(254, 244, 222, 0.92);
+    padding: 5% 5%;
+    padding-bottom: 12%;
+    border-top-left-radius: 3rem;
+    border-top-right-radius: 3rem;
 }
 
 .calendar-container{
