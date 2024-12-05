@@ -79,3 +79,15 @@
 .brown{
     background-color: #8D6D6D;
 }
+
+
+@media screen and (max-width: 480px) {
+    .events-container{
+        width: 100%;
+        border-radius: 0;
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+
+    }
+
+}

@@ -10,7 +10,7 @@
     justify-content: flex-start;
     background-color: rgba(254, 244, 222, 0.92);
     padding: 5% 5%;
-    padding-bottom: 12%;
+    padding-bottom: 7rem;
     border-top-left-radius: 3rem;
     border-top-right-radius: 3rem;
 }
@@ -103,4 +103,21 @@
 
 .selected-day:hover{
     background-color: #7e582a;
+}
+
+@media screen and (max-width: 480px) {
+    .calendar-encapsulating-container{
+        flex-direction: column;
+    }
+
+    .calendar-container{
+        width: calc(100% - 2rem);
+        border-radius: 2rem;
+        padding: 1rem;
+        min-height: 16rem;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        
+    }
+
 }

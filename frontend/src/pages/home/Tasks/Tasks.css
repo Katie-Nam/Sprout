@@ -8,7 +8,7 @@
     background-color: rgba(48, 67, 49, 1);
     padding: 0 5%;
     border-radius: 3rem;
-    margin-top: -6%;
+    margin-top: -3.5rem;
     padding-bottom: 5rem;
 }
 
@@ -157,6 +157,43 @@ thead{
     padding-bottom: 1rem;
     max-height: 80%;
     overflow-y: scroll;
+}
+
+.delete-popup{
+    width: 20%;
+    min-width: 15rem;
+    overflow: hidden;
+    padding: 2rem 0;
+    color: black;
+}
+
+.delete-popup img{
+    height: 5rem;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.delete-button{
+    font-family: 'lexend deca';
+    font-size: 1rem;
+    color: white;
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+}
+
+.ok{
+    background: #B3B3B3;
+}
+
+.cancel{
+    background: #333333;
 }
 
 .popup-header-container{
@@ -398,4 +435,41 @@ thead{
 
 .low{
     background-color: #E3B100;
+}
+
+
+
+@media screen and (max-width: 480px) {
+    td, tr{
+        word-wrap: break-word; /* Prevents content overflow */
+    }
+
+    th{
+        text-wrap: nowrap;
+        padding: 0 0.5rem;
+    }
+
+    .task-table-container{
+        overflow-x: scroll;
+    }
+
+    .filter label{
+        font-size: 0.8rem;
+    }
+
+    .task-container h1{
+        font-size: 1.5rem;
+    }
+
+    .popup-container{
+        width: calc(85% - 2rem);
+        padding: 1rem;
+    }
+
+    .delete-popup{
+        min-width: 15rem;
+        overflow: hidden;
+        padding: 2rem 0;
+        color: black;
+    }
 }

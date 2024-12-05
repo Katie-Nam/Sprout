@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Tasks.css';
 import deleteIcon from '../../../static/delete_icon.png';
 import sortIcon from '../../../static/sort_icon.png';
+import DeleteConfirmationPopup from './DeleteConfirmationPopup';
 
 interface Task {
     id: number;                // Unique identifier for the task
@@ -36,6 +37,11 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
     };
 
     const [rows, setRows] = useState<Task[] | null >(taskData);
+    const [prioritySortDesc, setPrioritySort] = useState(true);
+    const [dueDateSortDesc, setDueDateSort] = useState(true);
+
+    const [deleteVisible, setDeleteVisible] = useState(false);
+    const [deleteID, setDeleteID] = useState<number | null>(null);
 
     const originalData = useRef<Task[] | null>(taskData); // Immutable original data
 
@@ -114,9 +120,6 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
     }
 
 
-    const [prioritySortDesc, setPrioritySort] = useState(true);
-    const [dueDateSortDesc, setDueDateSort] = useState(true);
-
     function formatDatetimeString(datetimeString: string) {
         const date = new Date(datetimeString);
         const year = date.getFullYear();
@@ -148,9 +151,11 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
         }
     };
 
-    const handleDelete = (id: number) => {
+    const openDeletePopup = (id: number) => {
         // TODO: make handle delete
-        setRows((prevRows) => prevRows ? prevRows.filter((row) => row.id !== id) : []);
+        setDeleteID(id);
+        setDeleteVisible(true);
+        // setRows((prevRows) => prevRows ? prevRows.filter((row) => row.id !== id) : []);
         // handle delete
     };
       
@@ -206,7 +211,7 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
                             </td>
                             <td onClick={() => handleOpenPopup(row.id)}>{formatDatetimeString(row.dueDate)}</td>
                             <td>
-                                <button onClick={() => handleDelete(row.id)} className='delete-button'>
+                                <button onClick={() => openDeletePopup(row.id)} className='delete-button'>
                                     <img src={deleteIcon} alt="delete" className='delete-icon' />
                                 </button>
                             </td>
@@ -214,11 +219,7 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
                     ))}
                 </tbody>
             </table>
-            {/* <div className='popup-background'>
-                <div className="popup-container">
-                </div>
-
-            </div> */}
+            {deleteVisible && <DeleteConfirmationPopup deleteID={deleteID} setDeleteVisible={setDeleteVisible}/>}
         </div>
     )
 }
