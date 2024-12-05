@@ -12,17 +12,12 @@ interface Task {
 }
 
 type Props = {
-	selectedDate : Date
+	selectedDate : Date,
+	taskData : Task[] | null;
 }
 
-const Events = ({selectedDate}: Props) => {
-	const fakeData : Task[] = [
-        { id: 1, checkbox: false, description: "Task 1", tag: "inf133", priority: "!", dueDate: "2024-12-01T09:00", reminder: "1 hour before" },
-        { id: 2, checkbox: false, description: "Task 2", tag: "inf132", priority: "!!",  dueDate: "2024-12-05T14:30", reminder: "1 day before"},
-    ];
-
+const Events = ({selectedDate, taskData}: Props) => {
 	const [data, setData] = useState<Task[] | null>(null)
-
 
 	const [calendarItems, setCalendarItems] = useState<Task[] | null>(null);
 
@@ -42,7 +37,7 @@ const Events = ({selectedDate}: Props) => {
 	}
 
 	useEffect(() => {
-		setData(fakeData);
+		setData(taskData);
 		getEvents(selectedDate);
 	}, [selectedDate])
 

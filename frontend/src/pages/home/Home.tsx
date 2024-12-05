@@ -38,7 +38,7 @@ const Home = ({userName}: Props) => {
 				<button className='logout-button' onClick={handleLogoutClick}>logout</button>
 			</div>
 			<p className='header-text'>welcome {userName.toLowerCase()}!</p>
-			<Calendar />
+			<Calendar taskData={fakeData}/>
 			<Tasks taskData={fakeData}/>
 
 		</div>
