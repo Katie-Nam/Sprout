@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import CalendarItem from './CalendarItem/CalendarItem';
 import Events from './Events/Events';
 
-type Props = {}
+type Props = {
+    
+}
 
 const Calendar = (props: Props) => {
     const [selectedDay, setSelectedDay] = useState<Date>(new Date()); // Default to today's date

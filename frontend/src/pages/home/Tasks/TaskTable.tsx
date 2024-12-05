@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Tasks.css';
 import deleteIcon from '../../../static/delete_icon.png';
 import sortIcon from '../../../static/sort_icon.png';
@@ -18,31 +18,101 @@ type Props = {
     priorityFilter : string;
     dateRangeFilter : string;
     tagColors : {[key: string] : string};
+    taskData : Task[] | null;
     handleOpenPopup: (id: number) => void;
-    setTasksData: React.Dispatch<React.SetStateAction<Task[] | null>>;
 }
 
-const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter, tagColors, setTasksData}: Props) => {
+const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter, tagColors, taskData}: Props) => {
     const priorityColors : {[key: string] : string} = {
         "!": "low",
         "!!": "medium",
         "!!!": "high"
     }
 
-    const fakeData : Task[] = [
-        { id: 1, checkbox: false, description: "Task 1", tag: "inf133", priority: "!", dueDate: "2024-12-01T09:00", reminder: "1 hour before" },
-        { id: 2, checkbox: false, description: "Task 2", tag: "inf132", priority: "!!",  dueDate: "2024-12-05T14:30", reminder: "1 day before"},
-    ];
+    const dateRange: { [key: string]: Date } = {
+        "today": new Date(),
+        "last week": new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        "last month": new Date(Date.now() - 31 * 24 * 60 * 60 * 1000),
+    };
 
-    const [rows, setRows] = useState<Task[] | null >(null);
+    const [rows, setRows] = useState<Task[] | null >(taskData);
+
+    const originalData = useRef<Task[] | null>(taskData); // Immutable original data
+
+
+    useEffect(() => {
+        originalData.current = taskData;
+        setRows(taskData);
+	}, [taskData])
+
 
     const retrieveTasks = () => {
+        if (!originalData.current) return;
+        let filteredRows = originalData.current;
         // TODO: retrieve rows, based in the priority filter, tag filter, and date range filter, and due date sort and priority sort
         // make the completed checkboxes at the end
-        setRows(fakeData);
-    }
+
+        console.log("begin", tagFilter, priorityFilter, dateRangeFilter);
+        console.log(rows);
+
+        filteredRows = filteredRows != null ? filteredRows.filter((row) => {
+            
+            const rowDate = new Date(row.dueDate);
+            const isInDateRange =
+                dateRangeFilter in dateRange
+                    ? rowDate >= dateRange[dateRangeFilter]
+                    : true;
+            const matchesTag = tagFilter != "all" ? row.tag === tagFilter : true;
+            const matchesPriority = priorityFilter != "all" ? row.priority === priorityFilter : true;
+            
     
-    setTasksData(rows);
+            return isInDateRange && matchesTag && matchesPriority;
+        }) : [];
+
+        console.log("filtered", filteredRows);
+
+
+        // Sort rows: dueDate (asc) > priority (desc) > checkbox (false first)
+        const sortedRows = filteredRows.sort((a, b) => {
+            const dateA = new Date(a.dueDate).getTime();
+            const dateB = new Date(b.dueDate).getTime();
+
+
+            if (dueDateSortDesc){
+                if (dateA !== dateB) {
+                    return dateA - dateB;
+                }
+            }
+            else{
+                if (dateA !== dateB) {
+                    return dateB - dateA;
+                }
+            }
+
+            // Sort by priority ("!!!" > "!!" > "!")
+            const priorityMap:  { [key: string]: number }  = { "!!!": 3, "!!": 2, "!": 1 };
+            const priorityA = priorityMap[a.priority] || 0;
+            const priorityB = priorityMap[b.priority] || 0;
+            
+            if (prioritySortDesc){
+                if (priorityA !== priorityB) {
+                    return priorityB - priorityA; // Descending order
+                }
+            }
+            else{
+                if (priorityA !== priorityB) {
+                    return priorityA - priorityB; // Descending order
+                }
+            }
+            
+
+            // Move completed tasks (checkbox: true) to the end
+            return a.checkbox === b.checkbox ? 0 : a.checkbox ? 1 : -1;
+        });
+
+        setRows(sortedRows);
+    }
+
 
     const [prioritySortDesc, setPrioritySort] = useState(true);
     const [dueDateSortDesc, setDueDateSort] = useState(true);
@@ -76,8 +146,6 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
             // update rows
             retrieveTasks();
         }
-
-
     };
 
     const handleDelete = (id: number) => {
@@ -87,16 +155,11 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
     };
       
 
-    useEffect(()=> {
-        // update the rows inside of overall task container
-        setTasksData(rows);
-    }, [rows])
-
     useEffect(() => {
         // TODO: handle priority sort
+        setRows(originalData.current);
         retrieveTasks();
-
-    }, [prioritySortDesc, dueDateSortDesc])
+    }, [prioritySortDesc, dueDateSortDesc, dateRangeFilter, tagFilter, priorityFilter])
 
 
 
