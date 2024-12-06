@@ -11,23 +11,35 @@ interface Task {
     tag: string;               // Tag/category for the task
     priority: string;          // Priority indicator, e.g., "!", "!!"
     dueDate: string;           // Due date as an ISO 8601 string
-    reminder: string;
+    reminder: string;			// reminder as string
 }
 
 type Props = {
-	userName : string;
+
 }
 
-const Home = ({userName}: Props) => {
+const Home = ({}: Props) => {
+
+	const userName = sessionStorage.getItem('userName');
 
 	const fakeData : Task[] = [
         { id: 1, checkbox: false, description: "Task 1", tag: "inf133", priority: "!", dueDate: "2024-12-01T09:00", reminder: "1 hour before" },
         { id: 2, checkbox: false, description: "Task 2", tag: "inf132", priority: "!!",  dueDate: "2024-12-05T14:30", reminder: "1 day before"},
     ];
 
+	const tagColors = {
+        // TODO: figure out way to store colors and assign them
+        inf133: "brown",
+        inf132: "green"
+    }
+
 
 	const handleLogoutClick = () => {
-		// TODO
+		/*
+		this function logs the user out
+		*/
+		sessionStorage.removeItem('isAuthenticated');
+    	window.location.href = '/'; // Redirect to login
 
 	}
 
@@ -37,9 +49,9 @@ const Home = ({userName}: Props) => {
 				<img src={sproutImg} alt="sprout logo" className='corner-logo' />
 				<button className='logout-button' onClick={handleLogoutClick}>logout</button>
 			</div>
-			<p className='header-text'>welcome {userName.toLowerCase()}!</p>
-			<Calendar taskData={fakeData}/>
-			<Tasks taskData={fakeData}/>
+			<p className='header-text'>welcome {userName ? userName.toLowerCase() : "user"}!</p>
+			<Calendar taskData={fakeData} tagColors={tagColors}/>
+			<Tasks taskData={fakeData} tagColors={tagColors}/>
 
 		</div>
 	)

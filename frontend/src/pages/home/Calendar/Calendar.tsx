@@ -16,16 +16,16 @@ interface Task {
 
 type Props = {
     taskData : Task[] | null;
-    
+    tagColors : {[key: string] : string};
 }
 
-const Calendar = ({taskData}: Props) => {
+const Calendar = ({taskData, tagColors}: Props) => {
     const [selectedDay, setSelectedDay] = useState<Date>(new Date()); // Default to today's date
 
     return (
         <div className='calendar-encapsulating-container'>
             <CalendarItem onDaySelect={(day: Date) => setSelectedDay(day)} />
-            <Events selectedDate={selectedDay} taskData={taskData}/>
+            <Events selectedDate={selectedDay} taskData={taskData} tagColors={tagColors}/>
         </div>
     );
 }

@@ -8,7 +8,9 @@ type Props = {
 
 const DeleteConfirmationPopup = ({deleteID, setDeleteVisible}: Props) => {
     const handleDeleteOk = () => {
-        // handle delete with the given id
+        /*
+            this function handles delete with the given task id
+        */
 
         setDeleteVisible(false);
 

@@ -53,6 +53,9 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
 
 
     const retrieveTasks = () => {
+        /*
+            this function sorts and filters the rows based on the selected filters and sort
+        */
         if (!originalData.current) return;
         let filteredRows = originalData.current;
         // TODO: retrieve rows, based in the priority filter, tag filter, and date range filter, and due date sort and priority sort
@@ -75,10 +78,8 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
             return isInDateRange && matchesTag && matchesPriority;
         }) : [];
 
-        console.log("filtered", filteredRows);
 
-
-        // Sort rows: dueDate (asc) > priority (desc) > checkbox (false first)
+        // Sort rows: dueDate > priority > checkbox 
         const sortedRows = filteredRows.sort((a, b) => {
             const dateA = new Date(a.dueDate).getTime();
             const dateB = new Date(b.dueDate).getTime();
@@ -86,12 +87,12 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
 
             if (dueDateSortDesc){
                 if (dateA !== dateB) {
-                    return dateA - dateB;
+                    return dateA - dateB; // descending order
                 }
             }
             else{
                 if (dateA !== dateB) {
-                    return dateB - dateA;
+                    return dateB - dateA; // ascending order
                 }
             }
 
@@ -107,7 +108,7 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
             }
             else{
                 if (priorityA !== priorityB) {
-                    return priorityA - priorityB; // Descending order
+                    return priorityA - priorityB; // Ascending order
                 }
             }
             
@@ -121,6 +122,9 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
 
 
     function formatDatetimeString(datetimeString: string) {
+        /*
+            this function reformats a datetime string to be formatted like datetime-local
+        */
         const date = new Date(datetimeString);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
@@ -132,6 +136,11 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
     }
 
     const handleCheckboxChange = (id: number) => {
+        /*
+            this function handles a click to a row's checkbox by graying it out if its selected
+            and ungraying it otherwise
+                - updates its status in the db
+        */
         setRows((prevRows) =>
             prevRows
                 ? prevRows.map((row) =>
@@ -152,16 +161,18 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
     };
 
     const openDeletePopup = (id: number) => {
-        // TODO: make handle delete
+        /*
+            this function handles a click to a row's delete icon by raising a confirmation popup
+        */
         setDeleteID(id);
         setDeleteVisible(true);
-        // setRows((prevRows) => prevRows ? prevRows.filter((row) => row.id !== id) : []);
-        // handle delete
     };
       
 
     useEffect(() => {
-        // TODO: handle priority sort
+        /*
+            this event listener handles changes to the filters or sort
+        */
         setRows(originalData.current);
         retrieveTasks();
     }, [prioritySortDesc, dueDateSortDesc, dateRangeFilter, tagFilter, priorityFilter])

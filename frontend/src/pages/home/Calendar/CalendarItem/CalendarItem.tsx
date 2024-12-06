@@ -6,11 +6,13 @@ type Props = {
 }
 
 const CalendarItem = ({onDaySelect}: Props) => {
-
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDay, setSelectedDay] = useState<number | null>(new Date().getDate()); // Default to today
 
     const getMonthDays = (year : number, month : number) => {
+        /*
+            this function handles getting the selected month's days
+        */
         const firstDayOfMonth = new Date(year, month, 1);
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDayIndex = firstDayOfMonth.getDay();
@@ -27,6 +29,9 @@ const CalendarItem = ({onDaySelect}: Props) => {
     };
 
     const goToPreviousMonth = () => {
+        /*
+            this function handles a user's click to go to the previous month
+        */
         const newDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth() - 1
@@ -36,6 +41,9 @@ const CalendarItem = ({onDaySelect}: Props) => {
     };
 
     const goToNextMonth = () => {
+        /*
+            this function handles a user's click to go to the next month
+        */
         const newDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth() + 1
@@ -45,6 +53,9 @@ const CalendarItem = ({onDaySelect}: Props) => {
     };
 
     const handleDayClick = (day: number | null) => {
+        /*
+            this function handles a user's click on a day
+        */
         if (day) {
             setSelectedDay(day);
 
@@ -59,11 +70,13 @@ const CalendarItem = ({onDaySelect}: Props) => {
     };
 
     const renderDays = () => {
+        /*
+            this function handles a rendering days based on the selected date
+        */
         const today = new Date(); // Get today's date
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
         const days = getMonthDays(year, month);
-
 
     
         return days.map((day, index) => {

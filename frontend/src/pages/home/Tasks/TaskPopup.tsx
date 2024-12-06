@@ -35,7 +35,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         "!!!": "high"
     }
 
-    console.log(tasksData);
+    // if this is an edit popup, find the selected row
     var selectedRow = null;
     if (tasksData && !isAdd){
         for (var i = 0; i < tasksData.length; i++){
@@ -45,7 +45,6 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         }
     }
 
-    console.log("selected row", selectedRow);
     const [description, setDescription] = useState<string>(selectedRow != null && tasksData != null? tasksData[selectedRow].description : "");
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [selectedTag, setSelectedTag] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].tag : null);
@@ -61,12 +60,18 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
     };
 
     const handleReminderClick = (option: string) => {
+        /*
+            this function handles selecting a reminder
+        */
         setSelectedReminder(option);
         setIsOpen(false); // Close the dropdown after selecting an option
     };
     
 
     const selectTag = (tag: string) => {
+        /*
+            this function handles selecting a tag
+        */
         if (selectedTag === tag) {
             setSelectedTag(null); // Deselect the tag if it's double-clicked
         }
@@ -76,8 +81,10 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         
     };
     
-    
     const handleAddNewTag = () => {
+        /*
+            this function handles adding a new tag
+        */
         if (newTag.trim() && !tagColors[newTag]) {
             // Add the new tag to the state
             setTagColors({
@@ -90,8 +97,9 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
     };
 
     const handleSubmit = () => {
-        // description, due date
-        console.log(description, dueDate, selectedTag, priority);
+        /*
+            this function handles submitting and ensures and necessary fields are filled
+        */
         if (description === ""){
             setErrorMessage("Error: Description is missing");
         }
@@ -106,10 +114,10 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
             setErrorMessage("Error: No priority level was selected");
         }
 
+        // TODO: call to add/edit task
+        // if the selected task doesnt exist in the db, add it
+
     }
-
-
-
 
 
     return (

@@ -14,14 +14,19 @@ interface Task {
 type Props = {
 	selectedDate : Date,
 	taskData : Task[] | null;
+	tagColors : {[key: string] : string};
 }
 
-const Events = ({selectedDate, taskData}: Props) => {
+const Events = ({selectedDate, taskData, tagColors}: Props) => {
 	const [data, setData] = useState<Task[] | null>(null)
 
 	const [calendarItems, setCalendarItems] = useState<Task[] | null>(null);
 
 	function getEvents(selectedDate : Date){
+		/*
+			this function retrieves all tasks that have a due date of the selected date
+		*/
+
 		// TODO make function to get all tasks on that selected day
 		const selectedDateString = selectedDate.toISOString().split('T')[0];
 
@@ -50,9 +55,6 @@ const Events = ({selectedDate, taskData}: Props) => {
           })
         : 'No date selected';
 
-	const tagMap : {[key : string] : string} = {
-		"inf133" : "brown"
-	}
 
 	return (
 		<div className='events-container'>
@@ -64,7 +66,7 @@ const Events = ({selectedDate, taskData}: Props) => {
 						<div className={`tag-container ${item.priority ==  "!!" ? 'medium' : item.priority == '!' ? 'low' : 'high'}`}>
 							<p>{item.priority}</p>
 						</div>
-						<div className={`tag-container brown ${tagMap[item.tag]}`}>
+						<div className={`tag-container brown ${tagColors[item.tag]}`}>
 							<p>{item.tag}</p>
 						</div>
 					</div>
