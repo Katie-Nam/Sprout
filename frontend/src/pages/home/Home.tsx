@@ -11,7 +11,7 @@ interface Task {
     tag: string;               // Tag/category for the task
     priority: string;          // Priority indicator, e.g., "!", "!!"
     dueDate: string;           // Due date as an ISO 8601 string
-    reminder: string;			// reminder as string
+    reminder: string;		   // reminder as string
 }
 
 type Props = {
