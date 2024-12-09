@@ -74,5 +74,25 @@ router.put('/edit-task', async (req, res) => {
     }
 });
 
+// Delete Task Route (using task ID)
+router.delete('/delete-task/:id', async (req, res) => {
+    const { id } = req.params; // Get the task ID from the route parameters
+
+    try {
+        // Ensure the task exists before deleting
+        const [rows] = await db.query('SELECT * FROM Tasks WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        // Delete the task
+        await db.query('DELETE FROM Tasks WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 module.exports = router;
