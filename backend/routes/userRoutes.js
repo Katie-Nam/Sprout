@@ -10,51 +10,73 @@ router.post('/signup', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const [rows] = await db.query('SELECT * FROM User WHERE Email = ?', [email]);
-        if (rows.length > 0) {
-            return res.status(409).json({ message: 'Email already in use' });
+        // Check if the email is already in use
+        const [existingUser] = await db.query('SELECT * FROM User WHERE Email = ?', [email]);
+        if (existingUser.length > 0) {
+            return res.status(409).json({ message: 'Email is already in use.' });
         }
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        await db.query('INSERT INTO User (Email, Name, Password) VALUES (?, ?, ?)', [
-            email,
-            `${firstName} ${lastName}`,
-            hashedPassword,
-        ]);
 
-        const token = jwt.sign({ email: user.Email, name: user.Name }, SECRET_KEY, { expiresIn: '1h' });
+        // Insert the new user into the database
+        const [result] = await db.query(
+            'INSERT INTO User (Email, Name, Password) VALUES (?, ?, ?)',
+            [email, `${firstName} ${lastName}`, hashedPassword]
+        );
 
-        res.status(201).json({ message: 'User registered successfully',  token : token, userName: user.Name  });
+        // Generate a JWT token
+        const token = jwt.sign({ userId: result.insertId, email }, SECRET_KEY, {
+            expiresIn: '1h', // Token expires in 1 hour
+        });
+
+        res.status(201).json({
+            message: 'User registered successfully!',
+            data: {
+                token,
+                userName: `${firstName} ${lastName}`,
+            },
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error during signup:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 });
+
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Check if user exists in the database
         const [rows] = await db.query('SELECT * FROM User WHERE Email = ?', [email]);
         if (rows.length === 0) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(404).json({ message: 'User not found.' });
         }
 
         const user = rows[0];
 
-        // Compare hashed passwords
-        const isPasswordValid = await bcrypt.compare(password, user.Password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+        // Compare hashed password
+        const passwordMatch = await bcrypt.compare(password, user.Password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        // Generate JWT
-        const token = jwt.sign({ email: user.Email, name: user.Name }, SECRET_KEY, { expiresIn: '1h' });
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.id, email: user.Email }, SECRET_KEY, {
+            expiresIn: '1h', // Token expires in 1 hour
+        });
 
-        res.status(200).json({ token, userName: user.Name });
+        res.status(200).json({
+            message: 'Login successful!',
+            data: {
+                token,
+                userName: user.Name,
+            },
+        });
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 });
 

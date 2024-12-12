@@ -3,7 +3,7 @@ import './Login.css';
 import sproutLogo from '../../static/sprout_logo.png';
 import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const Signup = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -17,12 +17,13 @@ const SignUp = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [e.target.id]: e.target.value,
+            [e.target.name]: e.target.value,
         });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         const { firstName, lastName, email, password, confirmPassword } = formData;
 
         if (password !== confirmPassword) {
@@ -38,22 +39,25 @@ const SignUp = () => {
             });
 
             const result = await response.json();
-            if (response.ok) {
-                const { message, token, userName } = result.data;
-				localStorage.setItem('jwtToken', token);
-				sessionStorage.setItem('userName', userName);
-				sessionStorage.setItem('isAuthenticated', 'true');
-                setMessage('Sign up successful!');
-                navigate('/home');
-                
+            if (!response.ok) {
+                setMessage(result.message || 'Signup failed');
             } else {
-                setMessage(result.message || 'Sign up failed');
+                const { token, userName } = result.data;
+
+                // Store the JWT token and user name
+                localStorage.setItem('jwtToken', token);
+                sessionStorage.setItem('userName', userName);
+                sessionStorage.setItem('isAuthenticated', 'true');
+
+                setMessage('Signup successful!');
+                navigate('/home'); // Redirect to home page
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error during signup:', error);
             setMessage('An error occurred. Please try again later.');
         }
     };
+
 
     return (
         <div className='page-container'>
@@ -81,4 +85,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default Signup;
