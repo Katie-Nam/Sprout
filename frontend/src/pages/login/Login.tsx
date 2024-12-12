@@ -1,31 +1,52 @@
 import React, { useState } from 'react';
 import sproutLogo from '../../static/sprout_logo.png';
 import './Login.css';
+import axios, { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
 
 }
 
 const Login = (props: Props) => {
+	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
-	const handleLogin = () => {
+	const handleLogin = async () => {
 		/* 
 			this function handles logging in
 			- uses email, password
 		*/
 		// TODO: call to api to ensure that the email and password are correct, return user name
-		if (true){
-			sessionStorage.setItem('userName', 'Celine Trieu');
-			sessionStorage.setItem('isAuthenticated', 'true');
-    		window.location.href = '/home'; // Redirect after login
-		}
-		else{
-    		window.location.href = '/'; // Redirect after login
-		}
+		try {
+            const response = await fetch('http://localhost:5001/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
 
-  	}
+            const result = await response.json();
+            if (!response.ok) {
+                setError(result.message || "Failed to login.");
+            }
+			else{
+				const { token, userName } = result.data;
+				localStorage.setItem('jwtToken', token);
+				sessionStorage.setItem('userName', userName);
+				sessionStorage.setItem('isAuthenticated', 'true');
+				// Update app state and redirect
+				navigate('/home'); // Replace with your desired redirect path
+				setError('');
+			}
+        } catch (error) {
+            console.error(error);
+            setError('An error occurred. Please try again later.');
+			navigate('/'); 
+        }
+	}
+
 
 	return (
 		<div className='page-container'>
@@ -41,6 +62,7 @@ const Login = (props: Props) => {
 					<button type='submit' className='submit-button' onClick={handleLogin}>LOGIN</button>
 				</form>
 			</div>
+			<p>{error}</p>
 			<p>Need an account? <a href='/signup' >Sign up</a></p>
 
 		</div>
