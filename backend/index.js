@@ -20,7 +20,8 @@ app.use('/api', userRoutes);
 app.use('/api', taskRoutes);    // '/api' or '/'
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/tags', tagRoutes);
-app.use('/api/quotes', quoteRoutes);
+app.use('/api/quotes', quoteRoutes);      
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

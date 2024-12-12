@@ -1,0 +1,41 @@
+.quote-container {
+    width: 90%;
+    margin: 2rem auto; /* Center the Quotes container with spacing */
+    padding: 2% 5%;
+    background-color: rgba(254, 244, 222, 0.92); /* Match background style */
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+.quote-text {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #39240B;
+    margin-bottom: 1rem;
+}
+
+.quote-author {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.new-quote-button {
+    border: none;
+    font-family: 'Lexend Deca';
+    padding: 0.7rem 1.5rem;
+    color: white;
+    background-color: #39240B;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.new-quote-button:hover {
+    background-color: #7e582a;
+}

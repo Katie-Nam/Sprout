@@ -3,6 +3,7 @@ import sproutImg from '../../static/sprout_logo.png';
 import './Home.css';
 import Calendar from './Calendar/Calendar';
 import Tasks from './Tasks/Tasks';
+import Quotes from './Quotes/Quotes';
 
 interface Task {
     id: number;                // Unique identifier for the task
@@ -103,6 +104,7 @@ const Home = ({}: Props) => {
 			</div>
 			<p className='header-text'>welcome {userName ? userName.toLowerCase() : "user"}!</p>
 			<Calendar taskData={taskData} tagColors={tagColors}/>
+			<Quotes />
 			<Tasks taskData={taskData} tagColors={tagColors}/>
 
 		</div>
