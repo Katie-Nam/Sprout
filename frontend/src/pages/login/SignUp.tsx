@@ -46,8 +46,8 @@ const Signup = () => {
 
                 // Store the JWT token and user name
                 localStorage.setItem('jwtToken', token);
-                sessionStorage.setItem('userName', userName);
-                sessionStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('isAuthenticated', 'true');
 
                 setMessage('Signup successful!');
                 navigate('/home'); // Redirect to home page
