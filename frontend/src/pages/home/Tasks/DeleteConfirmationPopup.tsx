@@ -12,8 +12,8 @@ const DeleteConfirmationPopup = ({deleteID, setDeleteVisible}: Props) => {
             this function handles delete with the given task id
         */
         try {
-            const response = await fetch('http://localhost:5001/api/delete-task/' + deleteID, {
-                method: 'GET',
+            const response = await fetch(`http://localhost:5001/api/delete-task/${deleteID}`, {
+                method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
     

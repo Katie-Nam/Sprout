@@ -80,7 +80,7 @@ const Home = ({}: Props) => {
 	
 			const result = await response.json();
 			if (response.ok) {
-			  setTaskData(result.data);
+			  setTaskData(result);
 			}
 		  } catch (error) {
 			console.error('Error fetching task data:', error);

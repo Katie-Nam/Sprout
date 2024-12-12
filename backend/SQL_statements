@@ -5,7 +5,7 @@ CREATE DATABASE task_manager;
 USE task_manager;
 
 -- Create User table
-CREATE TABLE Users (
+CREATE TABLE User (
   id INT NOT NULL AUTO_INCREMENT,
   Email VARCHAR(255) NOT NULL UNIQUE,
   Name VARCHAR(255) NOT NULL,
@@ -30,5 +30,5 @@ CREATE TABLE Tasks (
     priority ENUM('!', '!!', '!!!') NOT NULL,
     dueDate DATETIME NOT NULL,
     reminder VARCHAR(255),
-    FOREIGN KEY (tag) REFERENCES Tags(tagName)
+    FOREIGN KEY (tag) REFERENCES Tags(name)
 );

@@ -35,6 +35,12 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         "!!!": "high"
     }
 
+    const priorityMapping : {[key: string] : string} = {
+        "low": "!",
+        "medium" : "!!",
+        "high" : "!!!"
+    }
+
     // if this is an edit popup, find the selected row
     var selectedRow = null;
     if (tasksData && !isAdd){
@@ -47,6 +53,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
 
     const [description, setDescription] = useState<string>(selectedRow != null && tasksData != null? tasksData[selectedRow].description : "");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
     const [selectedTag, setSelectedTag] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].tag : null);
     const [dueDate, setDueDate] = useState<string>(selectedRow != null && tasksData != null ? tasksData[selectedRow].dueDate: "");
     const [newTag, setNewTag] = useState<string>("");
@@ -136,12 +143,12 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
                 const response = await fetch('http://localhost:5001/api/add-task', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ description: description, tag: selectedTag, priority: priority, dueDate: dueDate, reminder: selectedReminder })
+                  body: JSON.stringify({ description: description, tag: selectedTag, priority: priorityMapping[priority], dueDate: dueDate, reminder: selectedReminder })
                 });
         
                 const result = await response.json();
                 if (response.ok) {
-                  console.log(result.data.message, result.data.taskId);
+                    console.log(result.message, result.taskId);
                 }
               } catch (error) {
                 console.error('Error adding task:', error);
@@ -157,7 +164,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         
                 const result = await response.json();
                 if (response.ok) {
-                  console.log(result.data.message);
+                  setMessage(result.message);
                 }
             } catch (error) {
                 console.error('Error editing task:', error);
@@ -252,6 +259,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
                     </div>
                     <button className='popup-submit-button' onClick={handleSubmit}>submit</button>
                     <p className='error-message-text'>{errorMessage}</p>
+                    <p>{message}</p>
                 </div>
             </div>
         </div>
