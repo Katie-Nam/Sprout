@@ -22,7 +22,9 @@ router.post('/signup', async (req, res) => {
             hashedPassword,
         ]);
 
-        res.status(201).json({ message: 'User registered successfully' });
+        const token = jwt.sign({ email: user.Email, name: user.Name }, SECRET_KEY, { expiresIn: '1h' });
+
+        res.status(201).json({ message: 'User registered successfully',  token : token, userName: user.Name  });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

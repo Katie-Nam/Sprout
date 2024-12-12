@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './Login.css';
 import sproutLogo from '../../static/sprout_logo.png';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -37,7 +39,13 @@ const SignUp = () => {
 
             const result = await response.json();
             if (response.ok) {
+                const { message, token, userName } = result.data;
+				localStorage.setItem('jwtToken', token);
+				sessionStorage.setItem('userName', userName);
+				sessionStorage.setItem('isAuthenticated', 'true');
                 setMessage('Sign up successful!');
+                navigate('/home');
+                
             } else {
                 setMessage(result.message || 'Sign up failed');
             }

@@ -22,7 +22,7 @@ type Props = {
     // editDueDate ?: string;
     // editReminder ?: string;
     // editPriority ?: string;
-    currentTagColors : { [key: string]: string };
+    currentTagColors : { [key: string]: string } | null;
     rowID ?: number | null;
     tasksData ?: Task[] | null;
     setPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,7 +50,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
     const [selectedTag, setSelectedTag] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].tag : null);
     const [dueDate, setDueDate] = useState<string>(selectedRow != null && tasksData != null ? tasksData[selectedRow].dueDate: "");
     const [newTag, setNewTag] = useState<string>("");
-    const [tagColors, setTagColors] = useState<{ [key: string]: string }>(currentTagColors);
+    const [tagColors, setTagColors] = useState<{ [key: string]: string } | null>(currentTagColors);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedReminder, setSelectedReminder] = useState<string | null>(selectedRow != null && tasksData != null ? tasksData[selectedRow].reminder: null);
     const [priority, setPriority] = useState<string>(selectedRow != null && tasksData != null ? priorityColors[tasksData[selectedRow].priority]: "");
@@ -85,7 +85,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         /*
             this function handles adding a new tag
         */
-        if (newTag.trim() && !tagColors[newTag]) {
+        if (newTag.trim() && tagColors && !tagColors[newTag]) {
             // Add the new tag to the state
             setTagColors({
                 ...tagColors,
@@ -96,7 +96,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         /*
             this function handles submitting and ensures and necessary fields are filled
         */
@@ -113,9 +113,57 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
         else if (priority === ""){
             setErrorMessage("Error: No priority level was selected");
         }
+        else if (selectedReminder === ""){
+            setErrorMessage("Error: No reminder was selected");
+        }
+
+        if (errorMessage != ""){
+            if (isAdd){
+                console.log('Error: Failed to add task.')
+            }
+            else{
+                console.log('Error: Failed to edit task.')
+            }
+            return;
+        }
+
+
 
         // TODO: call to add/edit task
         // if the selected task doesnt exist in the db, add it
+        if (isAdd){
+            try {
+                const response = await fetch('http://localhost:5001/api/add-task', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ description: description, tag: selectedTag, priority: priority, dueDate: dueDate, reminder: selectedReminder })
+                });
+        
+                const result = await response.json();
+                if (response.ok) {
+                  console.log(result.data.message, result.data.taskId);
+                }
+              } catch (error) {
+                console.error('Error adding task:', error);
+              }
+        }
+        else{
+            try {
+                const response = await fetch('http://localhost:5001/api/edit-task', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ id: rowID, description: description, tag: selectedTag, priority: priority, dueDate: dueDate, reminder: selectedReminder })
+                });
+        
+                const result = await response.json();
+                if (response.ok) {
+                  console.log(result.data.message);
+                }
+            } catch (error) {
+                console.error('Error editing task:', error);
+            }
+
+        }
 
     }
 
@@ -150,7 +198,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
                     <label htmlFor="tags">tags *</label>
                     <div className='popup-encapsulating-tags-container'>
                         <div className="existing-tag-container">
-                            {Object.keys(tagColors).map((tag) => (
+                            {tagColors && Object.keys(tagColors).map((tag) => (
                                 <button
                                 key={tag}
                                 onClick={() => selectTag(tag)}
@@ -162,7 +210,7 @@ const TaskPopup = ({isAdd, currentTagColors, rowID, tasksData, setPopupVisible}:
                             
                         </div>
                         {
-                            Object.keys(tagColors).length <= 4 && (
+                            tagColors && Object.keys(tagColors).length <= 4 && (
                                 <div className="add-tag-container">
                                 <p>add tag</p>
                                 <input type="text" placeholder="name" onChange={(e) => setNewTag(e.target.value)}/>

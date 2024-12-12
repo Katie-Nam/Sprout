@@ -18,7 +18,7 @@ type Props = {
     tagFilter : string;
     priorityFilter : string;
     dateRangeFilter : string;
-    tagColors : {[key: string] : string};
+    tagColors : {[key: string] : string} | null;
     taskData : Task[] | null;
     handleOpenPopup: (id: number) => void;
 }
@@ -58,12 +58,6 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
         */
         if (!originalData.current) return;
         let filteredRows = originalData.current;
-        // TODO: retrieve rows, based in the priority filter, tag filter, and date range filter, and due date sort and priority sort
-        // make the completed checkboxes at the end
-
-        console.log("begin", tagFilter, priorityFilter, dateRangeFilter);
-        console.log(rows);
-
         filteredRows = filteredRows != null ? filteredRows.filter((row) => {
             
             const rowDate = new Date(row.dueDate);
@@ -211,7 +205,7 @@ const TaskTable = ({handleOpenPopup, tagFilter, priorityFilter, dateRangeFilter,
                             </td>
                             <td onClick={() => handleOpenPopup(row.id)}>{row.description}</td>
                             <td onClick={() => handleOpenPopup(row.id)}>
-                                <div className={`table-tag-container ${tagColors[row.tag]}`}>
+                                <div className={`table-tag-container ${tagColors ? tagColors[row.tag] : ''}`}>
                                     {row.tag}
                                 </div>
                             </td>

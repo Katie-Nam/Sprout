@@ -7,11 +7,24 @@ type Props = {
 }
 
 const DeleteConfirmationPopup = ({deleteID, setDeleteVisible}: Props) => {
-    const handleDeleteOk = () => {
+    const handleDeleteOk = async () => {
         /*
             this function handles delete with the given task id
         */
-
+        try {
+            const response = await fetch('http://localhost:5001/api/delete-task/' + deleteID, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+    
+            const result = await response.json();
+            if (!response.ok) {
+                console.log("ERROR: Failed to delete task with ID", deleteID);
+                
+            }
+            } catch (error) {
+            console.error('Error fetching task data:', error);
+            }
         setDeleteVisible(false);
 
     }

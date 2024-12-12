@@ -14,7 +14,7 @@ interface Task {
 type Props = {
 	selectedDate : Date,
 	taskData : Task[] | null;
-	tagColors : {[key: string] : string};
+	tagColors : {[key: string] : string} | null;
 }
 
 const Events = ({selectedDate, taskData, tagColors}: Props) => {
@@ -66,7 +66,7 @@ const Events = ({selectedDate, taskData, tagColors}: Props) => {
 						<div className={`tag-container ${item.priority ==  "!!" ? 'medium' : item.priority == '!' ? 'low' : 'high'}`}>
 							<p>{item.priority}</p>
 						</div>
-						<div className={`tag-container brown ${tagColors[item.tag]}`}>
+						<div className={`tag-container brown ${tagColors ? tagColors[item.tag] : ''}`}>
 							<p>{item.tag}</p>
 						</div>
 					</div>

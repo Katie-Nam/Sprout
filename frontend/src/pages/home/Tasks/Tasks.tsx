@@ -16,7 +16,7 @@ interface Task {
 
 type Props = {
     taskData : Task[] | null;
-    tagColors : {[key: string] : string};
+    tagColors : {[key: string] : string} | null;
 }
 
 const Tasks = ({taskData, tagColors}: Props) => {
