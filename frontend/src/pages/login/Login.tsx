@@ -28,8 +28,8 @@ const Login = () => {
 
                 // Store token and user information
                 localStorage.setItem('jwtToken', token);
-                sessionStorage.setItem('userName', userName);
-                sessionStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('isAuthenticated', 'true');
 
                 // Redirect to the home page
                 navigate('/home');
