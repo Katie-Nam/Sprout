@@ -24,7 +24,7 @@ const Home = ({}: Props) => {
 	const [taskData, setTaskData] = useState<Task[] | null>(null);
 	const [tagColors, setTagColors] = useState<{ [key: string]: string } | null>(null);
 
-	const userName = sessionStorage.getItem('userName');
+	const userName = localStorage.getItem('userName');
 
 	// const fakeData : Task[] = [
     //     { id: 1, checkbox: false, description: "Task 1", tag: "inf133", priority: "!", dueDate: "2024-12-01T09:00", reminder: "1 hour before" },

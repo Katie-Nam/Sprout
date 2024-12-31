@@ -7,7 +7,7 @@ type Props = {
 
 const ProtectedRoute = ({children}: Props) => {
     // Check session storage for authentication
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
 
     if (!isAuthenticated) {
         // Redirect to the login page if not authenticated
